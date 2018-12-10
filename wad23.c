@@ -25,154 +25,153 @@
 	WAD23_ENTRY_TYPE_SIZE + WAD23_ENTRY_COMPRESSION_SIZE + \
 	WAD23_ENTRY_PAD_SIZE + WAD23_ENTRY_NAME_SIZE)
 
-bool_t is_wad2(restable_t *rt)
+bool_t is_wad2(restable_t * rt)
 {
-	char ident[WAD23_HEADER_IDENT_SIZE];
+  char ident[WAD23_HEADER_IDENT_SIZE];
 
-	if (readf(rt->file, "c4", ident) != OK)
-		return FALSE;
-	if (strncmp(ident, WAD2_IDENT, WAD23_HEADER_IDENT_SIZE) != 0)
-		return FALSE;
-	return TRUE;
+  if (readf(rt->file, "c4", ident) != OK)
+    return FALSE;
+  if (strncmp(ident, WAD2_IDENT, WAD23_HEADER_IDENT_SIZE) != 0)
+    return FALSE;
+  return TRUE;
 }
 
-bool_t is_wad3(restable_t *rt)
+bool_t is_wad3(restable_t * rt)
 {
-	char ident[WAD23_HEADER_IDENT_SIZE];
+  char ident[WAD23_HEADER_IDENT_SIZE];
 
-	if (readf(rt->file, "c4", ident) != OK)
-		return FALSE;
-	if (strncmp(ident, WAD3_IDENT, WAD23_HEADER_IDENT_SIZE) != 0)
-		return FALSE;
-	return TRUE;
+  if (readf(rt->file, "c4", ident) != OK)
+    return FALSE;
+  if (strncmp(ident, WAD3_IDENT, WAD23_HEADER_IDENT_SIZE) != 0)
+    return FALSE;
+  return TRUE;
 }
 
-bool_t wad23_fill_filename(resentry_t *re)
+bool_t wad23_fill_filename(resentry_t * re)
 {
-	char name[WAD23_ENTRY_NAME_SIZE + 5];
-	if (strlen(re->name ) > WAD23_ENTRY_NAME_SIZE)
-		return FALSE;
-	snprintf(name, WAD23_ENTRY_NAME_SIZE + 4, "%s.%zu", re->name, re->type);
-	s_strlower(name);
-	s_strcpy(&(re->filename), name);
-	if (re->filename == NULL)
-		return FALSE;
-	return TRUE;
+  char name[WAD23_ENTRY_NAME_SIZE + 5];
+
+  if (strlen(re->name) > WAD23_ENTRY_NAME_SIZE)
+    return FALSE;
+  snprintf(name, WAD23_ENTRY_NAME_SIZE + 4, "%s.%zu", re->name, re->type);
+  s_strlower(name);
+  s_strcpy(&(re->filename), name);
+  if (re->filename == NULL)
+    return FALSE;
+  return TRUE;
 }
 
-bool_t wad23_fill_name(resentry_t *re)
+bool_t wad23_fill_name(resentry_t * re)
 {
-	char *ext;
+  char *ext;
 
-	ext = NULL;
+  ext = NULL;
 
-	s_name(&(re->name), re->filename, SYS_PATH_DELIM);
-	s_strupper(re->name);
+  s_name(&(re->name), re->filename, SYS_PATH_DELIM);
+  s_strupper(re->name);
 
-	s_ext(&ext, re->filename, SYS_PATH_DELIM);
-	if (ext[0] != '.')
-	{
-		fprintf(stderr, "wad23_fill_name: filename haven't extension.\n");
-		re->type = 0;
-	}
-	else
-		re->type = atoi(&(ext[1]));
-	s_free(&ext);
+  s_ext(&ext, re->filename, SYS_PATH_DELIM);
+  if (ext[0] != '.')
+  {
+    fprintf(stderr, "wad23_fill_name: filename haven't extension.\n");
+    re->type = 0;
+  }
+  else
+    re->type = atoi(&(ext[1]));
+  s_free(&ext);
 
-	if (strlen(re->name) > WAD23_ENTRY_NAME_SIZE)
-	{
-		fprintf(stderr, "wad23_fill_name: Too long name \"%s\".\n", re->name);
-		return FALSE;
-	}
-	return TRUE;
+  if (strlen(re->name) > WAD23_ENTRY_NAME_SIZE)
+  {
+    fprintf(stderr, "wad23_fill_name: Too long name \"%s\".\n", re->name);
+    return FALSE;
+  }
+  return TRUE;
 }
 
-bool_t wad23_prepare_dir(restable_t *rt)
+bool_t wad23_prepare_dir(restable_t * rt)
 {
-	fseek(rt->file, WAD23_HEADER_SIZE, SEEK_SET);
-	return TRUE;
+  fseek(rt->file, WAD23_HEADER_SIZE, SEEK_SET);
+  return TRUE;
 }
 
-bool_t wad23_write_dir(restable_t *rt, const char *ident)
+bool_t wad23_write_dir(restable_t * rt, const char *ident)
 {
-	size_t i;
-	size_t offset;
-	
-	offset = ftell(rt->file);
-	fseek(rt->file, 0, SEEK_SET);
-	if (writef(rt->file, "c4l4l4", ident, rt->number, offset) != OK)
-	{
-		fprintf(stderr, "wad23_write_dir: Can't write header.\n");
-		return FALSE;
-	}
-	fseek(rt->file, offset, SEEK_SET);
-	for(i = 0; i < rt->number; i++)
-	{
-		if (writef(rt->file, "l4l4l4l1l1z2s16", 
-			rt->entries[i].offset,
-			rt->entries[i].compressed,
-			rt->entries[i].size,
-			rt->entries[i].type,
-			rt->entries[i].compression,
-			rt->entries[i].name) != OK)
-		{
-			fprintf(stderr, "wad23_write_dir: Can't write entry #%zu.\n", i);
-			return FALSE;
-		}
-	}
-	return TRUE;
+  size_t i;
+  size_t offset;
+
+  offset = ftell(rt->file);
+  fseek(rt->file, 0, SEEK_SET);
+  if (writef(rt->file, "c4l4l4", ident, rt->number, offset) != OK)
+  {
+    fprintf(stderr, "wad23_write_dir: Can't write header.\n");
+    return FALSE;
+  }
+  fseek(rt->file, offset, SEEK_SET);
+  for(i = 0; i < rt->number; i++)
+  {
+    if (writef(rt->file, "l4l4l4l1l1z2s16",
+               rt->entries[i].offset,
+               rt->entries[i].compressed,
+               rt->entries[i].size,
+               rt->entries[i].type,
+               rt->entries[i].compression, rt->entries[i].name) != OK)
+    {
+      fprintf(stderr, "wad23_write_dir: Can't write entry #%zu.\n", i);
+      return FALSE;
+    }
+  }
+  return TRUE;
 }
 
-bool_t wad2_write_dir(restable_t *rt)
+bool_t wad2_write_dir(restable_t * rt)
 {
-	return wad23_write_dir(rt, WAD2_IDENT);
+  return wad23_write_dir(rt, WAD2_IDENT);
 }
 
-bool_t wad3_write_dir(restable_t *rt)
+bool_t wad3_write_dir(restable_t * rt)
 {
-	return wad23_write_dir(rt, WAD3_IDENT);
+  return wad23_write_dir(rt, WAD3_IDENT);
 }
 
-bool_t wad23_read_dir(restable_t *rt)
+bool_t wad23_read_dir(restable_t * rt)
 {
-	char ident[WAD23_HEADER_IDENT_SIZE];
-	size_t offset;
-	size_t number;
-	size_t i;
+  char ident[WAD23_HEADER_IDENT_SIZE];
+  size_t offset;
+  size_t number;
+  size_t i;
 
-	if (readf(rt->file, "c4l4l4", ident, &number, &offset) != OK)
-	{
-		fprintf(stderr, "wad23_read_dir: Can't read header.\n");
-		return FALSE;
-	}
-	if ((strncmp(ident, WAD2_IDENT, WAD23_HEADER_IDENT_SIZE) != 0) &&
-		(strncmp(ident, WAD3_IDENT, WAD23_HEADER_IDENT_SIZE) != 0))
-	{
-		fprintf(stderr, "wad23_read_dir: Wrong ident.\n");
-		return FALSE;
-	}	
-	if (rt_set_number(rt, number) == FALSE)
-	{
-		fprintf(stderr, "wad23_read_dir: Can't resize entries.\n");
-		return FALSE;
-	}
-	fseek(rt->file, offset, SEEK_SET);
-	for(i = 0; i < rt->number; i++)
-	{
-		if (readf(rt->file, "l4l4l4l1l1c2s16", 
-			&(rt->entries[i].offset),
-			&(rt->entries[i].compressed),
-			&(rt->entries[i].size),
-			&(rt->entries[i].type),
-			&(rt->entries[i].compression),
-			NULL,
-			&(rt->entries[i].name)) != OK)
-		{
-			fprintf(stderr, "wad23_read_dir: Can't read entry #%zu.\n", i);
-			return FALSE;
-		}
-		if (rt->entries[i].compression == 0)
-			rt->entries[i].compressed = rt->entries[i].size;
-	}
-	return TRUE;
+  if (readf(rt->file, "c4l4l4", ident, &number, &offset) != OK)
+  {
+    fprintf(stderr, "wad23_read_dir: Can't read header.\n");
+    return FALSE;
+  }
+  if ((strncmp(ident, WAD2_IDENT, WAD23_HEADER_IDENT_SIZE) != 0) &&
+      (strncmp(ident, WAD3_IDENT, WAD23_HEADER_IDENT_SIZE) != 0))
+  {
+    fprintf(stderr, "wad23_read_dir: Wrong ident.\n");
+    return FALSE;
+  }
+  if (rt_set_number(rt, number) == FALSE)
+  {
+    fprintf(stderr, "wad23_read_dir: Can't resize entries.\n");
+    return FALSE;
+  }
+  fseek(rt->file, offset, SEEK_SET);
+  for(i = 0; i < rt->number; i++)
+  {
+    if (readf(rt->file, "l4l4l4l1l1c2s16",
+              &(rt->entries[i].offset),
+              &(rt->entries[i].compressed),
+              &(rt->entries[i].size),
+              &(rt->entries[i].type),
+              &(rt->entries[i].compression),
+              NULL, &(rt->entries[i].name)) != OK)
+    {
+      fprintf(stderr, "wad23_read_dir: Can't read entry #%zu.\n", i);
+      return FALSE;
+    }
+    if (rt->entries[i].compression == 0)
+      rt->entries[i].compressed = rt->entries[i].size;
+  }
+  return TRUE;
 }
