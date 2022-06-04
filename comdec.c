@@ -1,13 +1,8 @@
 #include <stdlib.h>
 #include "comdec.h"
 
-comdec_t comdec_zlib = { &zlib_dsize, &zlib_compress, &zlib_decompress };
-comdec_t comdec_pack2 = { &pack2_dsize, &pack2_compress, &pack2_decompress };
-comdec_t comdec_lzss = { &lzss_dsize, &lzss_compress, &lzss_decompress };
-comdec_t comdec_dat = { &dat_dsize, &dat_compress, &dat_decompress };
-
 bool_t c_fadd(FILE * dst, const char *src_filename, size_t * size,
-              size_t * compressed, comdec_t * comdec, int level)
+              size_t * compressed, const comdec_t * comdec, int level)
 {
   void *s;
   void *d;
@@ -99,7 +94,7 @@ bool_t c_fadd(FILE * dst, const char *src_filename, size_t * size,
 }
 
 bool_t c_fextract(const char *dst_filename, FILE * src, size_t size,
-                  size_t compressed, comdec_t * comdec)
+                  size_t compressed, const comdec_t * comdec)
 {
   void *s;
   void *d;
