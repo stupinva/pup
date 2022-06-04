@@ -185,6 +185,9 @@ bool_t lzss_compress(unsigned char *sdata, size_t ssize, unsigned char *ddata,
   size_t doffset;
   size_t dsize;
 
+  /* Подавляем предупреждение о неиспользуемом параметре */
+  (void)level;
+
   if (sdata == NULL)
   {
     fprintf(stderr, "lzss_compress: sdata is NULL.\n");

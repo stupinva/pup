@@ -331,6 +331,9 @@ bool_t apply(void)
 bool_t pack2_compress(unsigned char *s, size_t ssize0, unsigned char *d,
                       size_t * dsize0, int level)
 {
+  /* Подавляем предупреждение о неиспользуемом параметре */
+  (void)level;
+
   if (s == NULL)
   {
     fprintf(stderr, "pack2_compress: s is NULL.\n");

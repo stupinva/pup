@@ -411,11 +411,17 @@ bool_t rt_make_dirs(restable_t * rt)
 
 bool_t rt_not_save_meta(restable_t * rt)
 {
+  /* Подавляем предупреждение о неиспользуемом параметре */
+  (void)rt;
+
   return FALSE;
 }
 
 bool_t rt_not_load_meta(restable_t * rt)
 {
+  /* Подавляем предупреждение о неиспользуемом параметре */
+  (void)rt;
+
   return FALSE;
 }
 

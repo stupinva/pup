@@ -456,13 +456,16 @@ int main(const int carg, const char *varg[])
      }
    */
 
-  fprintf(stdout, "is_equal_files(\"%s\", \"%s\") == TRUE: ", varg[0], varg[0]);
-  if (is_equal_files(varg[0], varg[0]) == TRUE)
-    fprintf(stdout, "OK\n");
-  else
+  if (carg > 0)
   {
-    fprintf(stdout, "failed.\n");
-    i++;
+    fprintf(stdout, "is_equal_files(\"%s\", \"%s\") == TRUE: ", varg[0], varg[0]);
+    if (is_equal_files(varg[0], varg[0]) == TRUE)
+      fprintf(stdout, "OK\n");
+    else
+    {
+      fprintf(stdout, "failed.\n");
+      i++;
+    }
   }
 
   s_free(&s);
