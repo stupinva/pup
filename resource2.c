@@ -167,7 +167,7 @@ bool_t resource2_write_dir(restable_t * rt)
              0xADDEEDAC,
              0xADDEEDAC, rt->entries[0].offset - RESOURCE2_ENTRY_SIZE) != OK)
   {
-    fprintf(stderr, "grp_read_dir: Can't write header.\n");
+    fprintf(stderr, "resource2_write_dir: Can't write header.\n");
     return FALSE;
   }
   for(i = 0; i < rt->number; i++)
