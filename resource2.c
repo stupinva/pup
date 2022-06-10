@@ -113,6 +113,11 @@ bool_t resource2_read_dir(restable_t * rt)
     fprintf(stderr, "resource2_read_dir: Wrong ident.\n");
     return FALSE;
   }
+  if (number == 0)
+  {
+    fprintf(stderr, "resource2_read_dir: Wrong number of entries.\n");
+    return FALSE;
+  }
   if (rt_set_number(rt, number - 1) == FALSE)
   {
     fprintf(stderr, "resource2_read_dir: Can't resize entries.\n");
