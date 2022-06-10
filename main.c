@@ -11,7 +11,7 @@
 #include "pack.h"
 #include "pack2.h"
 #include "wad23.h"
-#include "res.h"
+#include "resource2.h"
 #include "dpk4.h"
 #include "dat.h"
 #include "dat2.h"
@@ -273,26 +273,26 @@ plugin_t plugins[] = {
    &wad23_add_resource,
    &wad3_write_dir},
   {
-   "res",
+   "resource2",
    "RES-file of Comanche 3",
-   RES_SUBDIRS,
-   RES_MERGE,
-   RES_META,
-   RES_TIME,
-   RES_PAGE,
-   &is_res,
+   RESOURCE2_SUBDIRS,
+   RESOURCE2_MERGE,
+   RESOURCE2_META,
+   RESOURCE2_TIME,
+   RESOURCE2_PAGE,
+   &is_resource2,
 
-   &res_read_dir,
-   &res_fill_filename,
-   &res_extract_resource,
+   &resource2_read_dir,
+   &resource2_fill_filename,
+   &resource2_extract_resource,
 
-   &res_save_meta,
-   &res_load_meta,
+   &resource2_save_meta,
+   &resource2_load_meta,
 
-   &res_fill_name,
-   &res_prepare_dir,
-   &res_add_resource,
-   &res_write_dir},
+   &resource2_fill_name,
+   &resource2_prepare_dir,
+   &resource2_add_resource,
+   &resource2_write_dir},
   {
    "dpk4",
    "DPK-file of Starmageddon 2",
