@@ -54,22 +54,24 @@
 
     $ ./pup --list
     Supported plugins:
-    grp     GRP-files of Duke Nukem 3D, Witchaven, Redneck Rampage, Shadow Warrior
-    gob     GOB-files of Star Wars: Dark Forces
-    pak     PAK-files of Dune II: The Building of a Dynasty
-    viv     VIV-files of the Need For the Speed 3: Hot Pursuit
-    vpp     VPP-files of Red Faction, The Punisher, Summoner
-    pack    PAK-files of Quake, Quake II, Half-Life, Heretic 2, MDK 2
-    pack2   PAK-files of Daikatana
-    wad2    WAD-file of Quake
-    wad3    WAD-files of Half-Life
-    res     RES-file of Comanche 3
-    dpk4    DPK-file of Starmageddon 2
-    dat     DAT-files of Fallout
-    dat2    DAT-files of Fallout 2
-    rff20   RFF-files of Blood, version 2.0
-    rff30   RFF-files of Blood, version 3.0
-    rff31   RFF-files of Blood, version 3.1
+    grp       - GRP-files of Duke Nukem 3D, Witchaven, Redneck Rampage, Shadow Warrior
+    gob       - GOB-files of Star Wars: Dark Forces
+    pak       - PAK-files of Dune II: The Building of a Dynasty
+    viv       - VIV-files of the Need For the Speed 3: Hot Pursuit
+    vpp       - VPP-files of Red Faction, The Punisher, Summoner
+    pack      - PAK-files of Quake, Quake II, Half-Life, Heretic 2, MDK 2
+    pack2     - PAK-files of Daikatana
+    wad2      - WAD-file of Quake
+    wad3      - WAD-files of Half-Life
+    resource1 - RES-file of Armored Fist 2
+    resource2 - RES-file of Comanche 3
+    dpk4      - DPK-file of Starmageddon 2
+    dat       - DAT-files of Fallout
+    dat2      - DAT-files of Fallout 2
+    rff20     - RFF-files of Blood, version 2.0
+    rff30     - RFF-files of Blood, version 3.0
+    rff31     - RFF-files of Blood, version 3.1
+    labn      - LABN-files of Outlaws
 
 Программа отлично справляется с определением типа исходного файла, поэтому используемый плагин указывать совершенно не обязательно. Плагин нужно указывать только при упаковке, чтобы программа сформировала файл нужного вам формата.
 
@@ -86,6 +88,8 @@
 Дальше я заметил в тех непонятных записях, что последние байты часто бывают одинаковыми и сделал предположение, что это - результат шифрования байта со значением 0 операцией XOR. Я подумал, что в конце имени файла обычно бывает его расширение и нашёл ресурсы, формат которых мне известен. Так я восстановил четырёхбайтовый ключ шифрования, который для шифрования 12-байтового имени файла использовался трижды. Первая программа была написана 09 февраля 2003 и умела только распаковывать ресурсы.
 
 С rff-файлами Blood всё оказалось и проще и сложнее. Информацию об алгоритме шифрования файлов я нашёл в Интернете, однако она подходила не ко всем найденным мной файлам rff. Я нашёл несколько разных версий утилиты BARF для создания новых файлов для Blood и попробовал сформировать ими новые файлы. Так я нашёл три разных формата rff-файлов, распаковку и упаковку которых и реализовал. Однако, игра не захотела работать с родными файлами, обработанными распаковкой и упаковкой. В конце концов я реализовал сохранение и загрузку метаданных rff-файлов при их распаковке и упаковке соответственно. Приём сработал и Blood стал работать с пересобранными файлами.
+
+Интересная история приключилась res-файлами Armored Fist 2. Я получил по электронной почте письмо из Польши, автор которого попросил выслать мне скомпилированную программу. Он разобрался с ней и попросил добавить поддержку файлов игры Armored Fist 2. Я нашёл в интернете архив с игрой, за вечер пятницы 10 июня 2022 года разобрался с форматом res-файлов и написал поддержку этого формата, благо он оказался очень похож на формат res-файлов Comanche 3.
 
 С остальными форматами всё было проще. Некоторые я проанализировал сам, о некоторых почитал в интернете.
 

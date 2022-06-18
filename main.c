@@ -11,6 +11,7 @@
 #include "pack.h"
 #include "pack2.h"
 #include "wad23.h"
+#include "resource1.h"
 #include "resource2.h"
 #include "dpk4.h"
 #include "dat.h"
@@ -273,6 +274,27 @@ plugin_t plugins[] = {
    &wad23_add_resource,
    &wad3_write_dir},
   {
+   "resource1",
+   "RES-file of Armored Fist 2",
+   RESOURCE1_SUBDIRS,
+   RESOURCE1_MERGE,
+   RESOURCE1_META,
+   RESOURCE1_TIME,
+   RESOURCE1_PAGE,
+   &is_resource1,
+
+   &resource1_read_dir,
+   &resource1_fill_filename,
+   &resource1_extract_resource,
+
+   &resource1_save_meta,
+   &resource1_load_meta,
+
+   &resource1_fill_name,
+   &resource1_prepare_dir,
+   &resource1_add_resource,
+   &resource1_write_dir},
+  {
    "resource2",
    "RES-file of Comanche 3",
    RESOURCE2_SUBDIRS,
@@ -484,7 +506,7 @@ void list_plugins(void)
 
   fprintf(stdout, "Supported plugins:\n");
   for(i = 0; i < NUM_PLUGINS; i++)
-    fprintf(stderr, "%s\t%s\n", plugins[i].name, plugins[i].description);
+    fprintf(stderr, "%-9s - %s\n", plugins[i].name, plugins[i].description);
 }
 
 bool_t pack(const plugin_t * p, const char *filename, const char *path,
