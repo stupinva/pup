@@ -69,7 +69,8 @@ bool_t dat2_read_dir(restable_t * rt)
               &(rt->entries[i].name), &length,
               &(rt->entries[i].compression),
               &(rt->entries[i].size),
-              &(rt->entries[i].compressed), &(rt->entries[i].offset)) != OK)
+              &(rt->entries[i].compressed),
+              &(rt->entries[i].offset)) != OK)
     {
       fprintf(stderr, "dat2_read_dir: Can't read entry #%zu.\n", i);
       return FALSE;
@@ -188,7 +189,8 @@ bool_t dat2_write_dir(restable_t * rt)
                rt->entries[i].name, length,
                rt->entries[i].compression,
                rt->entries[i].size,
-               rt->entries[i].compressed, rt->entries[i].offset) != OK)
+               rt->entries[i].compressed,
+               rt->entries[i].offset) != OK)
     {
       fprintf(stderr, "dat2_write_dir: Can't write entry #%zu.\n", i);
       return FALSE;
